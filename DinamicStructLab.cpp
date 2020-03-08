@@ -4,7 +4,9 @@
 #include <Windows.h>
 using namespace std;
 
-struct Person
+struct Person;
+
+ struct Person
 {
 	char FirstName[15],SecondName[15],LastName[15];
 	int Age;
@@ -13,7 +15,7 @@ struct Person
 };
 
 //TODO:возвращяет указатель на масив структур размерности Dimension
-Person* InitArray(int Dimension/*size*/);
+Person* InitArray(int Dimension);
 Person InitPerson();
 void DisplayArray(Person* Massive, int Dimaension);
 void DisplayChoise(Person*, int,char*,int,int);
@@ -25,7 +27,10 @@ void main(void)
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 	setlocale(0, "");
-
+	char m[255];
+	fscanf(stdin, "%s", m);
+	fprintf(stdout, "%s", m);
+	exit(0);
 	int Dimension;
 	char SexTag[7];
 	int LowAge, UpperAge;
@@ -34,13 +39,12 @@ void main(void)
 	Person* MassiveStruct =  nullptr;
 	do
 	{
-		//Person* Copy_MassiveStruct = nullptr;
-		cout << "\nEnter the number of persons:";
+		cout << "\nEnter the number of persons]$~ ";
 		do {
 			cin >> Dimension;
 			if (cin.fail())
 			{
-				cout << "Предыдущий ввод завершился некоректно пожалуйста повторите ввод!!!" << endl;
+				cout << "~$]Предыдущий ввод завершился некоректно пожалуйста повторите ввод!!!" << endl;
 				cin.clear();
 				cin.ignore(32222, '\n');
 			}
@@ -53,10 +57,10 @@ void main(void)
 		
 		if (MassiveStruct == nullptr)
 		{
-			cout << "\nDynamic array don't exist!\n";
+			cout << "\n~$]Dynamic array don't exist!\n";
 
 			do {
-				cout << "Введите '+' для того чтобы повторить попытку или нажмите '-' чтобы выйти из програмы...";
+				cout << "~$]Введите '+' для того чтобы повторить попытку или нажмите '-' чтобы выйти из програмы... ";
 				char symbol;
 				symbol = getchar();
 				(symbol == '+') ? begin==true  : begin==false;
@@ -70,18 +74,17 @@ void main(void)
 				
 	} while (begin!=true);
 
-	cout << "\nThe list of persons: \n";
+	cout << "\nThe list of persons: ";
 	DisplayArray(MassiveStruct, Dimension);
 
-	cout << "\nEnter the sex-tag: ";
+	cout << "\n~$]Enter the sex-tag: ";
 	    cin >> SexTag;
-	cout << "\nEnter of boundary of age: \n";
+	cout << "\nEnter of boundary of age]$~";
 	do
 	{
 		cin >> LowAge >> UpperAge;
 		if (cin.fail())
 		{
-			//cin.ignore(std::cin.rdbuf()->in_avail());
 			cin.clear();
 			cin.ignore(32222, '\n');
 		}
@@ -89,10 +92,10 @@ void main(void)
 			break;
 	} while (true);
 
-	cout << "\n\nThe list of choice-persons: \n";
+	cout << "\nThe list of choice-persons: \n";
 	DisplayChoise(MassiveStruct,Dimension,SexTag,LowAge,UpperAge);
 
-	cout << "\n\nThe sorting list of persons: \n";
+	cout << "\nThe sorting list of persons: \n";
 	SortFirstName(MassiveStruct, Dimension);
 	DisplayArray(MassiveStruct, Dimension);
 	
