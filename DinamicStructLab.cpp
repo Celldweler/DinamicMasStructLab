@@ -1,19 +1,21 @@
-﻿#include <iostream>
-#include <limits>
+﻿
+#include <iostream>
 #include <string>
 #include <Windows.h>
+#include <fstream>
+#define garbage_collector() cin.ignore(cin.rdbuf()->in_avail())
+
 using namespace std;
 
-struct Person;
-
- struct Person
+struct Person
 {
-	char FirstName[15],SecondName[15],LastName[15];
+	char FirstName[15],
+		 SecondName[15],
+		 LastName[15];
 	int Age;
-	char Sex[7];
+	char Sex[50];
 
 };
-
 //TODO:возвращяет указатель на масив структур размерности Dimension
 Person* InitArray(int Dimension);
 Person InitPerson();
@@ -21,16 +23,16 @@ void DisplayArray(Person* Massive, int Dimaension);
 void DisplayChoise(Person*, int,char*,int,int);
 void DisplayPerson(Person);
 void SortFirstName(Person*, int);
+int& CheckCorectDigitValue(int&);
 
-void main(void)
+
+
+int main(int argc,char* argv)
 {
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 	setlocale(0, "");
-	char m[255];
-	fscanf(stdin, "%s", m);
-	fprintf(stdout, "%s", m);
-	exit(0);
+
 	int Dimension;
 	char SexTag[7];
 	int LowAge, UpperAge;
@@ -44,17 +46,14 @@ void main(void)
 			cin >> Dimension;
 			if (cin.fail())
 			{
-				cout << "~$]Предыдущий ввод завершился некоректно пожалуйста повторите ввод!!!" << endl;
+				cout << "~$]Previous input failed, please re-enter !!!" << endl;
 				cin.clear();
 				cin.ignore(32222, '\n');
 			}
 			else
 				break;
 		} while (true);
-
 		MassiveStruct = InitArray(Dimension);
-
-		
 		if (MassiveStruct == nullptr)
 		{
 			cout << "\n~$]Dynamic array don't exist!\n";
@@ -78,7 +77,9 @@ void main(void)
 	DisplayArray(MassiveStruct, Dimension);
 
 	cout << "\n~$]Enter the sex-tag: ";
-	    cin >> SexTag;
+	do {
+		cin >> SexTag;
+	} while (isdigit((char)SexTag[1]));
 	cout << "\nEnter of boundary of age]$~";
 	do
 	{
@@ -92,37 +93,34 @@ void main(void)
 			break;
 	} while (true);
 
-	cout << "\nThe list of choice-persons: \n";
+	cout << "\nThe list of choice-persons: ";
 	DisplayChoise(MassiveStruct,Dimension,SexTag,LowAge,UpperAge);
 
-	cout << "\nThe sorting list of persons: \n";
+	cout << "\nThe sorting list of persons: ";
 	SortFirstName(MassiveStruct, Dimension);
 	DisplayArray(MassiveStruct, Dimension);
 	
 	delete MassiveStruct;
-
 	
 }
-
-
 Person InitPerson()
 {
 	Person Man;
 	cout << "\nEnter first name:";
-	cin.ignore(std::cin.rdbuf()->in_avail());
-	                          cin.getline(Man.FirstName,255);
-	cout << "Enter second name]$~";
-	cin.ignore(std::cin.rdbuf()->in_avail());
-                          cin.getline(Man.SecondName,255);
+	garbage_collector();
+		cin.getline(Man.FirstName,255);
+	cout << "Enter second name:";
+	garbage_collector();
+		cin.getline(Man.SecondName,255);
 	cout << "Enter last name:";
-	cin.ignore(std::cin.rdbuf()->in_avail());
-	                       cin.getline(Man.LastName,255);
+	garbage_collector();
+	  cin.getline(Man.LastName, 255);
 	cout << "Enter age: ";
-	cin.ignore(std::cin.rdbuf()->in_avail());
-	                     cin>>(Man.Age);
+	garbage_collector();
+		CheckCorectDigitValue(Man.Age);
 	cout << "Enter sex: ";
-	cin.ignore(std::cin.rdbuf()->in_avail());
-	                cin.getline(Man.Sex,255);
+	garbage_collector();
+		cin.getline(Man.Sex,255);
 
 	return Man;
 
@@ -158,8 +156,6 @@ void DisplayChoise(Person* Massive, int Dimension, char* SexTag, int LowAge, int
 		{
 			DisplayPerson(Massive[i]);
 		}
-			
-
 	}
 }
 
@@ -167,19 +163,40 @@ void DisplayPerson(Person Man)
 {
 	printf("\n%s %s %s %d year %s", Man.FirstName, Man.SecondName, Man.LastName, Man.Age, Man.Sex);
 }
+
+
 void SortFirstName(Person* Massive, int Dimension)
 {
-	Person tmp;
+	Person Temp;
 	for (size_t i = 0; i <= Dimension; i++)
 	{
 		for (size_t q = Dimension - 1; q > i; q--)
 		{
 			if (strcmp(Massive[q].FirstName, Massive[q - 1].FirstName) < 0)
 				
-		    tmp = Massive[q];
+			Temp = Massive[q];
 			Massive[q] = Massive[q - 1];
-			Massive[q - 1] = tmp;
+			Massive[q - 1] = Temp;
 
 		}
 	}
+}
+int& CheckCorectDigitValue(int& value)
+{
+	bool flag = false;
+	do {
+		if (flag) {
+			cout << "Please re-enter!!!";
+		}flag = false;
+		cin >> value;
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(32222, '\n');
+		}
+		else
+		{
+			return value;
+		}
+	} while (true);
 }
