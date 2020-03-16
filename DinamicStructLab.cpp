@@ -173,11 +173,11 @@ void SortFirstName(Person* Massive, int Dimension)
 		for (size_t q = Dimension - 1; q > i; q--)
 		{
 			if (strcmp(Massive[q].FirstName, Massive[q - 1].FirstName) < 0)
-				
-			Temp = Massive[q];
-			Massive[q] = Massive[q - 1];
-			Massive[q - 1] = Temp;
-
+			{
+				Temp = Massive[q];
+				Massive[q] = Massive[q - 1];
+				Massive[q - 1] = Temp;
+			}
 		}
 	}
 }
